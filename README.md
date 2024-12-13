@@ -3,6 +3,7 @@
 
 ## Libraries
 - [lottie-react-native](https://docs.expo.dev/versions/latest/sdk/lottie/)
+- [stack-navigator](https://reactnavigation.org/docs/stack-navigator/)
 
 ## Database
 - [Supabase](https://supabase.com/docs/guides/auth/quickstarts/react-native)
