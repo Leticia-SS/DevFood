@@ -3,4 +3,6 @@
 
 ## Libraries
 - [lottie-react-native](https://docs.expo.dev/versions/latest/sdk/lottie/)
-- [styled components](https://styled-components.com/)
+
+## Database
+- [Supabase](https://supabase.com/docs/guides/auth/quickstarts/react-native)
