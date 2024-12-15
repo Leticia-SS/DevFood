@@ -39,7 +39,7 @@ export default function Categories() {
       }, []);
 
       const handleCategoryPress = (categoryId: string) => {
-        router.push(`/category/${categoryId}`);
+        router.push(`/pages/category/${categoryId}`);
     };
 
 

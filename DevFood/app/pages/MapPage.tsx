@@ -83,7 +83,7 @@ export default function MapPage(){
           const newCounts = { ...prev };
     
           if (newCounts[restaurantId] === 1) {
-            router.push(`/restaurants/${restaurantId}`);
+            router.push(`/pages/restaurants/${restaurantId}`);
             newCounts[restaurantId] = 0;
           } else {
             newCounts[restaurantId] = (newCounts[restaurantId] || 0) + 1;
