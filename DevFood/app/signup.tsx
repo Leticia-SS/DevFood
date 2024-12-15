@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { supabase } from '../lib/supabase';
 import { Button, Input } from '@rneui/themed';
-import { router } from 'expo-router';
+import { router, Stack } from 'expo-router';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -30,6 +30,8 @@ export default function Signup() {
   }
 
   return (
+    <>
+    <Stack.Screen options={{headerShown: false}} />
     <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
@@ -42,7 +44,7 @@ export default function Signup() {
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          label="Phone Number"
+          label="Phone"
           leftIcon={{ type: 'font-awesome', name: 'phone' }}
           onChangeText={(text) => setPhoneNumber(text)}
           value={phoneNumber}
@@ -78,6 +80,7 @@ export default function Signup() {
         <Button title="Go to Login" onPress={() => router.push('/login')} />
       </View>
     </View>
+    </>
   );
 }
 

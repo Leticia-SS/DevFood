@@ -1,11 +1,12 @@
 // Home.js
 import React from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
 import { Button } from '@rneui/themed';
 import { supabase } from '../../lib/supabase';
-import { router } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 
 export default function Home() {
+  const router = useRouter();
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -17,7 +18,7 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <Button title="Sign Out" onPress={signOut} />
+      <TouchableOpacity style={styles.TouchableOpacity} onPress={signOut}><Text style={styles.Text}>Sign Out</Text></TouchableOpacity> 
     </View>
   );
 }
@@ -28,4 +29,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  TouchableOpacity: {
+    backgroundColor: '#1E0033',
+    padding: 15,
+    marginVertical: 8,
+    borderRadius: 8,
+  },
+  Text: {
+    color: '#ffffff'
+  }
 });

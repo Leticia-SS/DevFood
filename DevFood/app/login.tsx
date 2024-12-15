@@ -3,6 +3,7 @@ import { Alert, StyleSheet, View, AppState } from 'react-native';
 import { supabase } from '../lib/supabase';
 import { Button, Input } from '@rneui/themed';
 import { router } from 'expo-router';
+import { Stack } from "expo-router"
 
 AppState.addEventListener('change', (state) => {
   if (state === 'active') {
@@ -33,6 +34,8 @@ export default function Login() {
   }
 
   return (
+    <>
+    <Stack.Screen options={{headerShown: false}} />
     <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
@@ -62,6 +65,7 @@ export default function Login() {
         <Button title="Go to Sign Up" onPress={() => router.push('/signup')} />
       </View>
     </View>
+    </>
   );
 }
 
