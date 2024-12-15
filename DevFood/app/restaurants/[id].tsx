@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { Stack } from 'expo-router';
 
 interface Restaurant {
   id: number;
@@ -65,6 +66,8 @@ export default function RestaurantDetailsPage() {
     }
 
     return (
+        <>
+            <Stack.Screen options={{title: 'Voltar'}} />
         <ScrollView style={styles.container}>
             <View style={styles.headerContainer}>
                 <Text style={styles.restaurantName}>{restaurant.name}</Text>
@@ -86,6 +89,7 @@ export default function RestaurantDetailsPage() {
                 ))}
             </View>
         </ScrollView>
+        </>
     );
 }
 
