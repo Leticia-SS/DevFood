@@ -66,7 +66,7 @@ export default function Categories() {
                   renderItem={({ item, index }) => (
                     <TouchableOpacity onPress={() => handleCategoryPress(item.id)}>
                         <Card style={{ backgroundColor: getCardColor(index)}}>
-                          <Text>{item.category}</Text>
+                          <Text style={styles.text}>{item.category}</Text>
                         </Card>
                     </TouchableOpacity>
                   )}
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     textAlign: 'center',
-    padding: 5
+    padding: 10,
+    // fontWeight: 'bold'
   }
 })
