@@ -1,14 +1,21 @@
 import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router';
 
 export default function CustomHeader() {
+    const router = useRouter();
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.headerContainer}>
-                <TouchableOpacity>
-                    <Text>sdfvnfxtgn</Text>
+                <TouchableOpacity onPress={() => router.push('/pages/MapPage')}>
+                    <Ionicons name="map-outline" size={20} color='black' />
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <Text>Header</Text>
+                    <Text>Pesquisar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Ionicons />
                 </TouchableOpacity>
             </View>
             
@@ -21,12 +28,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     headerContainer: {
-        backgroundColor: '#8c52ff',
+        backgroundColor: '#fff',
         height: 80,
         flexDirection: 'row',
         gap: 20,
-        // alignItems: 'center',
-        // justifyContent: 'space-between'
+        alignItems: 'center',
+        // justifyContent: 'space-between',
+        padding: 20,
     },
     titleContainer: {
 

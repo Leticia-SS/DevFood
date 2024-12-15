@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'expo-router'
 
@@ -46,6 +46,15 @@ export default function ProfileScreen() {
     );
   }
 
+    async function signOut() {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        Alert.alert('Error', error.message);
+      } else {
+        router.replace('/login');
+      }
+    }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Profile</Text>
@@ -64,6 +73,12 @@ export default function ProfileScreen() {
         onPress={() => router.push('/pages/EditProfile')}
       >
         <Text style={styles.buttonText}>Editar Perfil</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => signOut()}
+      >
+        <Text style={styles.buttonText}>Sair</Text>
       </TouchableOpacity>
     </ScrollView>
   );

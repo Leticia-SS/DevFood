@@ -11,10 +11,6 @@ export default function Layout() {
         name="signup" 
         options={{ title: 'Sign Up', headerShown: false }} 
       />
-      <Stack.Screen 
-        name="setprofile" 
-        options={{ title: 'Create Account', headerShown: false }} 
-      />
       <Stack.Screen name='(auth)' options={{ headerShown: false}} />
     </Stack>
   );

@@ -1,6 +1,6 @@
 import { Text, FlatList, View, ActivityIndicator } from "react-native"
 import { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabase';
+import { supabase } from '@/lib/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Categories() {

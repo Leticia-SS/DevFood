@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { supabase } from '@/lib/supabase';
-import { useRouter } from 'expo-router';
+import { useRouter, Stack } from 'expo-router';
 
 export default function EditProfileScreen() {
   const router = useRouter();
@@ -60,6 +60,8 @@ export default function EditProfileScreen() {
   };
 
   return (
+    <>
+    <Stack.Screen options={{title: 'Voltar'}} />
     <View style={styles.container}>
       <Text style={styles.title}>Edit Profile</Text>
 
@@ -92,6 +94,7 @@ export default function EditProfileScreen() {
         <Text style={styles.buttonText}>Save Changes</Text>
       </TouchableOpacity>
     </View>
+    </>
   );
 }
 

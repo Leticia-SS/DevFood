@@ -25,7 +25,7 @@ export default function Signup() {
     });
 
     if (error) Alert.alert(error.message);
-    else Alert.alert('Please check your inbox for email verification!');
+    else Alert.alert('Usuário criado');
     setLoading(false);
   }
 

@@ -62,7 +62,7 @@ export default function Login() {
         <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
       </View>
       <View style={styles.verticallySpaced}>
-        <Button title="Go to Sign Up" onPress={() => router.push('/signup')} />
+        <Button title="Cadastre-se" onPress={() => router.push('/signup')} />
       </View>
     </View>
     </>
