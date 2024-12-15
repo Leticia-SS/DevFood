@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Stack } from 'expo-router';
+import { useCart } from '@/components/CartContext';
 
 interface Restaurant {
   id: number;
@@ -13,12 +14,21 @@ interface Restaurant {
   price: string;
   time?: string;
 }
+interface MenuItem {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    restaurant_id: number;
+  }
 
 export default function RestaurantDetailsPage() {
     const { id } = useLocalSearchParams();
     const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
     const [menu, setMenu] = useState<any[] | null>(null);
     const [loading, setLoading] = useState(true);
+    const { addToCart, cart } = useCart();
+
 
     useEffect(() => {
         const fetchRestaurantDetails = async () => {
@@ -65,30 +75,71 @@ export default function RestaurantDetailsPage() {
         );
     }
 
+    const getItemQuantity = (itemId: number) => {
+        const cartItem = cart.find(item => item.id === itemId);
+        return cartItem ? cartItem.quantity : 0;
+    };
+
     return (
         <>
             <Stack.Screen options={{title: 'Voltar'}} />
-        <ScrollView style={styles.container}>
-            <View style={styles.headerContainer}>
-                <Text style={styles.restaurantName}>{restaurant.name}</Text>
-                <Text style={styles.restaurantDescription}>{restaurant.description}</Text>
-                <View style={styles.metaContainer}>
-                    <Text style={styles.priceText}>{restaurant.price}</Text>
-                    {restaurant.time && <Text style={styles.timeText}>{restaurant.time}</Text>}
-                </View>
-            </View>
-
-            <View style={styles.menuContainer}>
-                <Text style={styles.menuTitle}>Cardápio</Text>
-                {menu && menu.map((item) => (
-                    <View key={item.id} style={styles.menuItemContainer}>
-                        <Text style={styles.menuItemName}>{item.name}</Text>
-                        <Text style={styles.menuItemDescription}>{item.description}</Text>
-                        <Text style={styles.menuItemPrice}>R$ {item.price.toFixed(2)}</Text>
+            <ScrollView style={styles.container}>
+                <View style={styles.headerContainer}>
+                    <Text style={styles.restaurantName}>{restaurant.name}</Text>
+                    <Text style={styles.restaurantDescription}>{restaurant.description}</Text>
+                    <View style={styles.metaContainer}>
+                        <Text style={styles.priceText}>{restaurant.price}</Text>
+                        {restaurant.time && <Text style={styles.timeText}>{restaurant.time}</Text>}
                     </View>
-                ))}
-            </View>
-        </ScrollView>
+                </View>
+
+                <View style={styles.menuContainer}>
+                    <Text style={styles.menuTitle}>Cardápio</Text>
+                    {menu && menu.map((item) => (
+                        <View key={item.id} style={styles.menuItemContainer}>
+                            <View style={styles.menuItemContent}>
+                                <View style={styles.menuItemTextContainer}>
+                                    <Text style={styles.menuItemName}>{item.name}</Text>
+                                    <Text style={styles.menuItemDescription}>{item.description}</Text>
+                                    <Text style={styles.menuItemPrice}>R$ {item.price.toFixed(2)}</Text>
+                                </View>
+                                <View style={styles.quantityContainer}>
+                                    <TouchableOpacity 
+                                        style={styles.quantityButton}
+                                        onPress={() => {
+                                            const currentQuantity = getItemQuantity(item.id);
+                                            if (currentQuantity > 0) {
+                                                addToCart({
+                                                    id: item.id,
+                                                    name: item.name,
+                                                    price: item.price,
+                                                    restaurantId: item.restaurant_id
+                                                });
+                                            }
+                                        }}
+                                    >
+                                        <Text style={styles.quantityButtonText}>-</Text>
+                                    </TouchableOpacity>
+                                    <Text style={styles.quantityText}>
+                                        {getItemQuantity(item.id)}
+                                    </Text>
+                                    <TouchableOpacity 
+                                        style={styles.quantityButton}
+                                        onPress={() => addToCart({
+                                            id: item.id,
+                                            name: item.name,
+                                            price: item.price,
+                                            restaurantId: item.restaurant_id
+                                        })}
+                                    >
+                                        <Text style={styles.quantityButtonText}>+</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    ))}
+                </View>
+            </ScrollView>
         </>
     );
 }
@@ -151,5 +202,33 @@ const styles = StyleSheet.create({
     menuItemPrice: {
         fontSize: 16,
         color: '#4CAF50'
+    },
+    menuItemContent: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    menuItemTextContainer: {
+        flex: 1,
+        marginRight: 10
+    },
+    quantityContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 5
+    },
+    quantityButton: {
+        padding: 10,
+        backgroundColor: '#f0f0f0'
+    },
+    quantityButtonText: {
+        fontSize: 18,
+        fontWeight: 'bold'
+    },
+    quantityText: {
+        paddingHorizontal: 15,
+        fontSize: 16
     }
 })

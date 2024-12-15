@@ -1,59 +1,83 @@
-// import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode } from 'react';
 
-// interface CartItem {
-//   id: number;
-//   name: string;
-//   price: number;
-//   restaurantId: number;
-// }
+interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  restaurantId: number;
+}
 
-// interface CartContextType {
-//   cart: CartItem[];
-//   addItemToCart: (item: CartItem) => void;
-//   clearCart: () => void;
-//   setCart: (cart: CartItem[]) => void;
-//   currentRestaurant: number | null;
-// }
+interface CartContextType {
+  cart: CartItem[];
+  addToCart: (item: Omit<CartItem, 'quantity'>) => void;
+  removeFromCart: (itemId: number) => void;
+  updateQuantity: (itemId: number, quantity: number) => void;
+  clearCart: () => void;
+  getTotalPrice: () => number;
+}
 
-// const CartContext = createContext<CartContextType | undefined>(undefined);
+const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// export const useCart = () => {
-//   const context = useContext(CartContext);
-//   if (!context) {
-//     throw new Error('useCart must be used within a CartProvider');
-//   }
-//   return context;
-// };
+export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [cart, setCart] = useState<CartItem[]>([]);
 
-// interface CartProviderProps {
-//   children: ReactNode;
-// }
+  const addToCart = (item: Omit<CartItem, 'quantity'>) => {
+    setCart(currentCart => {
+      const existingItem = currentCart.find(cartItem => cartItem.id === item.id);
+      
+      if (existingItem) {
+        return currentCart.map(cartItem => 
+          cartItem.id === item.id 
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      }
+      
+      return [...currentCart, { ...item, quantity: 1 }];
+    });
+  };
 
-// export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-//   const [cart, setCart] = useState<CartItem[]>([]);
-//   const [currentRestaurant, setCurrentRestaurant] = useState<number | null>(null);
+  const removeFromCart = (itemId: number) => {
+    setCart(currentCart => currentCart.filter(item => item.id !== itemId));
+  };
 
-//   const addItemToCart = (item: CartItem) => {
-//     if (currentRestaurant && currentRestaurant !== item.restaurantId) {
-//       alert('Você está adicionando itens de um restaurante diferente. Deseja esvaziar o carrinho?');
-//       return;
-//     }
+  const updateQuantity = (itemId: number, quantity: number) => {
+    setCart(currentCart => 
+      quantity > 0
+        ? currentCart.map(item => 
+            item.id === itemId ? { ...item, quantity } : item
+          )
+        : currentCart.filter(item => item.id !== itemId)
+    );
+  };
 
-//     if (!currentRestaurant) {
-//       setCurrentRestaurant(item.restaurantId);
-//     }
+  const clearCart = () => {
+    setCart([]);
+  };
 
-//     setCart((prevCart) => [...prevCart, item]);
-//   };
+  const getTotalPrice = () => {
+    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  };
 
-//   const clearCart = () => {
-//     setCart([]);
-//     setCurrentRestaurant(null);
-//   };
+  return (
+    <CartContext.Provider value={{ 
+      cart, 
+      addToCart, 
+      removeFromCart, 
+      updateQuantity, 
+      clearCart, 
+      getTotalPrice 
+    }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
 
-//   return (
-//     <CartContext.Provider value={{ cart, addItemToCart, clearCart, setCart, currentRestaurant }}>
-//       {children}
-//     </CartContext.Provider>
-//   );
-// };
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (context === undefined) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+};
