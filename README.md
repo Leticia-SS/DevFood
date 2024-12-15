@@ -5,6 +5,7 @@
 - [lottie-react-native](https://docs.expo.dev/versions/latest/sdk/lottie/)
 - [stack-navigator](https://reactnavigation.org/docs/stack-navigator/)
 - [expo-location](https://docs.expo.dev/versions/latest/sdk/location/)
+- [vector-icons](https://ionic.io/ionicons)
 - [map-view](https://docs.expo.dev/versions/latest/sdk/map-view/)
 
 ## Database
