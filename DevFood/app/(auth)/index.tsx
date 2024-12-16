@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Alert, TouchableOpacity, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity, Text, ScrollView, Image } from 'react-native';
 import { supabase } from '@/lib/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
@@ -46,6 +46,13 @@ export default function Home() {
 
   return (
     <ScrollView style={styles.container}>
+      <Image 
+        source={require('@/assets/images/background.png')}
+        style={styles.headerImage}
+      />
+
+        <Text style={styles.restaurantsTitle}>Restaurantes</Text>
+
       {restaurants && restaurants.map((restaurant) => (
         <TouchableOpacity
           key={restaurant.id}
@@ -64,11 +71,13 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    // padding: 10,
+    marginTop: 80
   },
   card: {
     backgroundColor: '#fff',
     padding: 15,
+    margin: 10,
     marginVertical: 10,
     borderRadius: 10,
     shadowColor: '#000',
@@ -80,11 +89,12 @@ const styles = StyleSheet.create({
   restaurantName: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 5
   },
   restaurantDescription: {
     fontSize: 14,
     color: '#555',
-    marginVertical: 5,
+    marginBottom: 20
   },
   restaurantTime: {
     fontSize: 12,
@@ -93,4 +103,29 @@ const styles = StyleSheet.create({
     right: 10,
     bottom: 10,
   },
+    headerImage: {
+      width: '100%',
+      height: 200,
+      resizeMode: 'cover',
+      marginBottom: 20,
+    },
+    cardTitleContainer: {
+      marginBottom: 20,
+    },
+    restaurantsTitle: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: '#8c52ff', 
+      backgroundColor: '#ffde59',
+      padding: 10,
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 4,
+      elevation: 5,
+      textAlign: 'center',
+      marginBottom: 10
+    },
+  
 });

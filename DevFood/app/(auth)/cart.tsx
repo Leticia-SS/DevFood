@@ -58,12 +58,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    padding: 20,
+    // padding: 20,
   },
   title: {
+    marginTop: 20,
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    color: '#8c52ff', 
+    backgroundColor: '#ffde59',
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    elevation: 5,
+    textAlign: 'center',
+    marginBottom: 20
   },
   restaurant: {
     fontSize: 18,
@@ -79,7 +88,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   orderContainer: {
-    marginBottom: 20,
+    // marginBottom: 20,
+    margin: 10,
     padding: 15,
     borderWidth: 1,
     borderColor: '#eee',

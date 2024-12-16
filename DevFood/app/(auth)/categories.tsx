@@ -61,7 +61,7 @@ export default function Categories() {
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item, index }) => (
                     <TouchableOpacity onPress={() => handleCategoryPress(item.id)}>
-                        <Card style={{ backgroundColor: getCardColor(index)}}>
+                        <Card style={{ backgroundColor: getCardColor(index), margin: 10 }}>
                           <Text style={styles.text}>{item.category}</Text>
                         </Card>
                     </TouchableOpacity>
@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20,
-    margin: 5
   },
   text: {
     fontSize: 20,
@@ -87,9 +86,16 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   title: {
-    fontWeight: '400',
     fontSize: 24,
-    textAlign: 'center',
+    fontWeight: 'bold',
+    color: '#8c52ff', 
+    backgroundColor: '#ffde59',
     padding: 10,
-  }
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    elevation: 5,
+    textAlign: 'center',
+    marginBottom: 20
+  },
 })

@@ -52,7 +52,7 @@ export default function CartPage() {
 
   const handleCheckout = async () => {
     const newOrder = {
-      id: Date.now(),
+      id: Date.now().toString(),
       total: getTotalPrice(),
       items: cart,
       paymentMethod: "Pagamento em dinheiro",
@@ -61,15 +61,13 @@ export default function CartPage() {
     };
 
     try {
-      const existingOrdersJson = await AsyncStorage.getItem('pedidos');
-      const existingOrders = existingOrdersJson ? JSON.parse(existingOrdersJson) : [];
-      const updatedOrders = [...existingOrders, newOrder];
-      await AsyncStorage.setItem('pedidos', JSON.stringify(updatedOrders));
-
       clearCart();
-      router.push('/pages/OrderPage');
+      router.push({
+        pathname: '/pages/OrderPage',
+        params: { order: JSON.stringify(newOrder) }
+      });
     } catch (error) {
-      console.error('Erro ao salvar pedido:', error);
+      console.error('Erro ao processar pedido:', error);
     }
   };
 
