@@ -41,6 +41,7 @@
   - In the Supabase dashboard, create a table for user profiles (if not already set up).
   - Retrieve the SUPABASE_URL and SUPABASE_ANON_KEY from your Supabase project settings.
   - Create a .env file in the root of your project and add the following
+    
      ```bash
     SUPABASE_URL=your_supabase_url
     SUPABASE_ANON_KEY=your_supabase_anon_key
