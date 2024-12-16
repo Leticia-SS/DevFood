@@ -120,7 +120,8 @@ export default function OrderPage() {
     <>
         <Stack.Screen options={{title: 'Voltar', headerStyle: {
         backgroundColor: '#1E0033',
-      }, headerTintColor: 'white'}} />        <View style={styles.container}>
+      }, headerTintColor: 'white'}} />        
+      <View style={styles.container}>
         <Text style={styles.title}>Detalhes do Pedido</Text>
         <ScrollView style={styles.detailsContainer}>
             <Text style={styles.orderId}>Pedido #{orderDetails.id}</Text>
