@@ -171,7 +171,7 @@ export default function OrderPage() {
                 latitude: restaurantLocation.latitude,
                 longitude: restaurantLocation.longitude
                 }}
-                apikey="AIzaSyD4RqS4Yu8_rNgM4ifVkXEJ280CMsghF_Y"
+                apikey={process.env.GOOGLE_API_KEY || ''}
                 strokeWidth={3}
                 strokeColor="hotpink"
             />
