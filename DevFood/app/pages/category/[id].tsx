@@ -48,7 +48,9 @@ export default function Category() {
 
     return (
         <>
-        <Stack.Screen options={{title: 'Voltar'}} />
+        <Stack.Screen options={{title: 'Voltar', headerStyle: {
+        backgroundColor: '#1E0033',
+      }, headerTintColor: 'white'}} />
         <View style={styles.container}>
             {loading ? (
                 <ActivityIndicator size="large" color="#0000ff" />

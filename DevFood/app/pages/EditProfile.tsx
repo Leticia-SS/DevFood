@@ -61,7 +61,9 @@ export default function EditProfileScreen() {
 
   return (
     <>
-    <Stack.Screen options={{title: 'Voltar'}} />
+      <Stack.Screen options={{title: 'Voltar', headerStyle: {
+        backgroundColor: '#1E0033',
+      }, headerTintColor: 'white'}} />
     <View style={styles.container}>
       <Text style={styles.title}>Editar Perfil</Text>
 

@@ -82,7 +82,9 @@ export default function RestaurantDetailsPage() {
 
     return (
         <>
-            <Stack.Screen options={{title: 'Voltar'}} />
+            <Stack.Screen options={{title: 'Voltar', headerStyle: {
+                backgroundColor: '#1E0033',
+            }, headerTintColor: 'white'}} />            
             <ScrollView style={styles.container}>
                 <View style={styles.headerContainer}>
                     <Text style={styles.restaurantName}>{restaurant.name}</Text>

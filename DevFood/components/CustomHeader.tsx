@@ -36,10 +36,10 @@ export default function CustomHeader() {
         <SafeAreaView style={styles.container}>
             <View style={styles.headerContainer}>
                 <TouchableOpacity onPress={() => router.push('/pages/MapPage')}>
-                    <Ionicons name="map-outline" size={20} color='black' />
+                    <Ionicons name="map-outline" size={20} color='white' />
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <Text>{address}</Text>
+                    <Text style={styles.titleContainer}>{address}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
                     <Ionicons />
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     headerContainer: {
-        backgroundColor: '#fff',
+        backgroundColor: '#1E0033',
         height: 80,
         flexDirection: 'row',
         gap: 20,
@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     titleContainer: {
-
+        color: "white"
     }
 })
