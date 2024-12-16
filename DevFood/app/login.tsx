@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, View, AppState } from 'react-native';
+import { Alert, StyleSheet, View, AppState, TouchableOpacity, TextInput, Text } from 'react-native';
 import { supabase } from '../lib/supabase';
-import { Button, Input } from '@rneui/themed';
 import { router } from 'expo-router';
 import { Stack } from "expo-router"
 
@@ -37,33 +36,39 @@ export default function Login() {
     <>
     <Stack.Screen options={{headerShown: false}} />
     <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Input
-          label="Email"
-          leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-          placeholder="email@address.com"
-          autoCapitalize={'none'}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Input
-          label="Password"
-          leftIcon={{ type: 'font-awesome', name: 'lock' }}
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-          placeholder="Password"
-          autoCapitalize={'none'}
-        />
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button title="Cadastre-se" onPress={() => router.push('/signup')} />
-      </View>
+      <Text style={styles.title}>Login</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={(text) => setEmail(text)}
+        autoCapitalize="none"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={(text) => setPassword(text)}
+        secureTextEntry
+        autoCapitalize="none"
+      />
+
+      <TouchableOpacity 
+        style={[styles.button, styles.signInButton]} 
+        onPress={signInWithEmail}
+        disabled={loading}
+      >
+        <Text style={styles.buttonText}>Entrar</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity 
+        style={[styles.button, styles.signupButton]} 
+        onPress={() => router.push('/signup')}
+      >
+        <Text style={styles.buttonText}>Cadastre-se</Text>
+      </TouchableOpacity>
     </View>
     </>
   );
@@ -71,15 +76,45 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#1E0033',
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  input: {
+    backgroundColor: '#fff',
+    width: '100%',
     padding: 12,
+    borderRadius: 8,
+    marginBottom: 12,
+    fontSize: 16,
+    borderColor: '#ccc',
+    borderWidth: 1,
   },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
+  button: {
+    width: '100%',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 12,
   },
-  mt20: {
-    marginTop: 20,
+  signInButton: {
+    backgroundColor: '#8c52ff',
+  },
+  signupButton: {
+    backgroundColor: '#ffde59',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
