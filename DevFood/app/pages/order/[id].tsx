@@ -6,7 +6,9 @@ import { supabase } from '@/lib/supabase';
 import MapView, { Marker } from 'react-native-maps';
 import { requestForegroundPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
+import { LogBox } from "react-native"
 
+LogBox.ignoreAllLogs(true)
 interface OrderItem {
   name: string;
   price: number;
@@ -172,7 +174,7 @@ export default function OrderPage() {
                 latitude: restaurantLocation.latitude,
                 longitude: restaurantLocation.longitude
                 }}
-                apikey={process.env.GOOGLE_API_KEY || ''}
+                apikey="AIzaSyD4RqS4Yu8_rNgM4ifVkXEJ280CMsghF_Y"
                 strokeWidth={3}
                 strokeColor="hotpink"
             />
