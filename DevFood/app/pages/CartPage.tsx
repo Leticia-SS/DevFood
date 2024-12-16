@@ -13,61 +13,92 @@ export default function CartPage() {
 
   const restaurantId = getRestaurantId();
 
-  async function getRestaurant(id: number) {
-    const { data: restaurant, error } = await supabase
-      .from('restaurants')
-      .select('*')
-      .eq('id', id)
-      .single();
+  async function fetchRestaurant(id: number) {
+    try {
+      const storedRestaurant = await AsyncStorage.getItem(`restaurant_${id}`);
+      if (storedRestaurant) {
+        setRestaurant(JSON.parse(storedRestaurant));
+        return;
+      }
 
-    if (error) {
-      console.error("Erro ao buscar dados do restaurante:", error);
+      const { data: restaurantData, error } = await supabase
+        .from('restaurants')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) {
+        console.error('Erro ao buscar restaurante no Supabase:', error);
+        return;
+      }
+
+      if (restaurantData) {
+        setRestaurant(restaurantData);
+        await AsyncStorage.setItem(`restaurant_${id}`, JSON.stringify(restaurantData));
+      }
+    } catch (err) {
+      console.error('Erro ao buscar dados do restaurante:', err);
     }
-
-    return restaurant;
   }
 
   useEffect(() => {
-    const fetchRestaurant = async () => {
-      if (restaurantId) {
-        const savedRestaurant = await AsyncStorage.getItem(`restaurant_${restaurantId}`);
-        
-        if (savedRestaurant) {
-          setRestaurant(JSON.parse(savedRestaurant));
-          setLoading(false);
-        } else {
-          const restaurantData = await getRestaurant(restaurantId);
-          setRestaurant(restaurantData);
-          setLoading(false);
-          
-          AsyncStorage.setItem(`restaurant_${restaurantId}`, JSON.stringify(restaurantData));
-        }
-      } else {
-        setLoading(false);
-      }
-    };
-
-    fetchRestaurant();
+    if (restaurantId) {
+      fetchRestaurant(restaurantId).finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
   }, [restaurantId]);
 
   const handleCheckout = async () => {
-    const newOrder = {
-      id: Date.now().toString(),
-      total: getTotalPrice(),
-      items: cart,
-      paymentMethod: "Pagamento em dinheiro",
-      restaurantId: restaurantId,
-      restaurantName: restaurant?.name || '',
-    };
-
     try {
+      if (!restaurantId || !restaurant) {
+        console.error('Restaurante não encontrado. Não é possível finalizar o pedido.');
+        return;
+      }
+
+      const newOrder = {
+        created_at: new Date().toISOString(),
+        total: getTotalPrice(),
+        restaurant_id: restaurantId,
+        restaurant_name: restaurant.name || '',
+      };
+
+      const { data: insertedOrder, error: orderError } = await supabase
+        .from('pedidos')
+        .insert([newOrder])
+        .select('id')
+        .single();
+
+      if (orderError) {
+        console.error('Erro ao inserir pedido:', orderError);
+        return;
+      }
+
+      const orderId = insertedOrder.id;
+
+      const orderItems = cart.map((item) => ({
+        pedido_id: orderId,
+        cardapio_id: item.id,
+        item_nome: item.name,
+        preco: item.price,
+        quantidade: item.quantity,
+        created_at: new Date().toISOString(),
+      }));
+
+      const { error: itemsError } = await supabase.from('itens_pedido').insert(orderItems);
+
+      if (itemsError) {
+        console.error('Erro ao inserir itens do pedido:', itemsError);
+        return;
+      }
+
       clearCart();
       router.push({
         pathname: '/pages/OrderPage',
-        params: { order: JSON.stringify(newOrder) }
+        params: { orderId },
       });
     } catch (error) {
-      console.error('Erro ao processar pedido:', error);
+      console.error('Erro ao processar o checkout:', error);
     }
   };
 
@@ -89,53 +120,53 @@ export default function CartPage() {
 
   return (
     <>
-    <Stack.Screen options={{title: 'Voltar'}} />
-    <View style={styles.container}>
-      <Text style={styles.title}>Carrinho</Text>
-      {restaurant && (
-        <Text style={styles.restaurantName}>{restaurant.name}</Text>
-      )}
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {cart.map((item) => (
-          <View key={item.id} style={styles.cartItemContainer}>
-            <View style={styles.itemDetails}>
-              <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemPrice}>R$ {item.price.toFixed(2)}</Text>
-            </View>
-            <View style={styles.quantityContainer}>
-              <TouchableOpacity 
-                style={styles.quantityButton}
-                onPress={() => updateQuantity(item.id, item.quantity - 1)}
+      <Stack.Screen options={{ title: 'Voltar' }} />
+      <View style={styles.container}>
+        <Text style={styles.title}>Carrinho</Text>
+        {restaurant && (
+          <Text style={styles.restaurantName}>{restaurant.name}</Text>
+        )}
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          {cart.map((item) => (
+            <View key={item.id} style={styles.cartItemContainer}>
+              <View style={styles.itemDetails}>
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemPrice}>R$ {item.price.toFixed(2)}</Text>
+              </View>
+              <View style={styles.quantityContainer}>
+                <TouchableOpacity
+                  style={styles.quantityButton}
+                  onPress={() => updateQuantity(item.id, item.quantity - 1)}
+                >
+                  <Text style={styles.quantityButtonText}>-</Text>
+                </TouchableOpacity>
+                <Text style={styles.quantityText}>{item.quantity}</Text>
+                <TouchableOpacity
+                  style={styles.quantityButton}
+                  onPress={() => updateQuantity(item.id, item.quantity + 1)}
+                >
+                  <Text style={styles.quantityButtonText}>+</Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity
+                style={styles.removeButton}
+                onPress={() => removeFromCart(item.id)}
               >
-                <Text style={styles.quantityButtonText}>-</Text>
-              </TouchableOpacity>
-              <Text style={styles.quantityText}>{item.quantity}</Text>
-              <TouchableOpacity 
-                style={styles.quantityButton}
-                onPress={() => updateQuantity(item.id, item.quantity + 1)}
-              >
-                <Text style={styles.quantityButtonText}>+</Text>
+                <Text style={styles.removeButtonText}>Remover</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity 
-              style={styles.removeButton}
-              onPress={() => removeFromCart(item.id)}
-            >
-              <Text style={styles.removeButtonText}>Remover</Text>
-            </TouchableOpacity>
+          ))}
+        </ScrollView>
+        <View style={styles.summaryContainer}>
+          <View style={styles.totalContainer}>
+            <Text style={styles.totalLabel}>Total:</Text>
+            <Text style={styles.totalPrice}>R$ {getTotalPrice().toFixed(2)}</Text>
           </View>
-        ))}
-      </ScrollView>
-      <View style={styles.summaryContainer}>
-        <View style={styles.totalContainer}>
-          <Text style={styles.totalLabel}>Total:</Text>
-          <Text style={styles.totalPrice}>R$ {getTotalPrice().toFixed(2)}</Text>
+          <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
+            <Text style={styles.checkoutButtonText}>Finalizar Compra</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
-          <Text style={styles.checkoutButtonText}>Finalizar Compra</Text>
-        </TouchableOpacity>
       </View>
-    </View>
     </>
   );
 }
@@ -255,4 +286,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-

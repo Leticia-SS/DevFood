@@ -6,6 +6,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { requestForegroundPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
 import { Stack } from 'expo-router';
+
 interface OrderItem {
   name: string;
   price: number;
@@ -22,38 +23,52 @@ interface OrderDetails {
 
 export default function OrderPage() {
   const { order } = useLocalSearchParams();
-  const orderDetails: OrderDetails | null = order ? JSON.parse(order as string) : null;
+  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [restaurantLocation, setRestaurantLocation] = useState<any | null>(null);
   const [userLocation, setUserLocation] = useState<any | null>(null);
 
-  const fetchRestaurantLocation = async (restaurantId: number) => {
-    const { data, error } = await supabase
-      .from('restaurants')
-      .select('latitude, longitude')
-      .eq('id', restaurantId)
-      .single();
+  useEffect(() => {
+    if (order) {
+      try {
+        const parsedOrder = JSON.parse(order as string);
+        setOrderDetails(parsedOrder);
+        fetchRestaurantLocation(parsedOrder.restaurantId);
+        fetchUserLocation();
+      } catch (error) {
+        console.error("Error parsing order:", error);
+      }
+    }
+  }, [order]);
 
-    if (error) {
+  const fetchRestaurantLocation = async (restaurantId: number) => {
+    try {
+      const { data, error } = await supabase
+        .from('restaurants')
+        .select('latitude, longitude')
+        .eq('id', restaurantId)
+        .single();
+
+      if (error) {
+        console.error("Erro ao buscar localização do restaurante:", error);
+      } else {
+        setRestaurantLocation(data);
+      }
+    } catch (error) {
       console.error("Erro ao buscar localização do restaurante:", error);
-    } else {
-      setRestaurantLocation(data);
     }
   };
 
   const fetchUserLocation = async () => {
-    const { granted } = await requestForegroundPermissionsAsync();
-    if (granted) {
-      const currentPosition = await getCurrentPositionAsync();
-      setUserLocation(currentPosition.coords);
+    try {
+      const { granted } = await requestForegroundPermissionsAsync();
+      if (granted) {
+        const currentPosition = await getCurrentPositionAsync();
+        setUserLocation(currentPosition.coords);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar localização do usuário:", error);
     }
   };
-
-  useEffect(() => {
-    if (orderDetails) {
-      fetchRestaurantLocation(orderDetails.restaurantId);
-      fetchUserLocation();
-    }
-  }, [orderDetails]);
 
   if (!orderDetails) {
     return (
