@@ -73,7 +73,7 @@
 <img src="https://github.com/user-attachments/assets/f69b9539-5a03-400e-83e7-66e192fb8156" alt="Screenshot 19" width="400" />
 
 Database Schema:  
-<img src="https://github.com/user-attachments/assets/3e4c1187-bfb7-4783-8ca8-1096c91fa65c" alt="Database" width="600" />
+<img src="https://github.com/user-attachments/assets/3e4c1187-bfb7-4783-8ca8-1096c91fa65c" alt="Database" width="900" />
 
 
 ## License
