@@ -93,10 +93,8 @@ export default function CartPage() {
       }
 
       clearCart();
-      router.push({
-        pathname: '/pages/OrderPage',
-        params: { orderId },
-      });
+      router.push(`/pages/order/${orderId}`);
+
     } catch (error) {
       console.error('Erro ao processar o checkout:', error);
     }

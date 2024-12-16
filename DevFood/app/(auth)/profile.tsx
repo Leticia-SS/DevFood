@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native'
-import { supabase } from '@/lib/supabase'
-import { useRouter } from 'expo-router'
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { supabase } from '@/lib/supabase';
+import { useRouter } from 'expo-router';
 
 interface Profile {
   id: string;
@@ -41,45 +41,60 @@ export default function ProfileScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Text>Loading profile...</Text>
+        <Text style={styles.loadingText}>Carregando perfil...</Text>
       </View>
     );
   }
 
-    async function signOut() {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        Alert.alert('Error', error.message);
-      } else {
-        router.replace('/login');
-      }
+  async function signOut() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      Alert.alert('Erro', error.message);
+    } else {
+      router.replace('/login');
     }
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Profile</Text>
+      <View style={styles.profileContainer}>
+        <Text style={styles.title}>Perfil</Text>
+        {profile && (
+          <>
+            <View style={styles.card}>
+              <Text style={styles.profileText}>Nome: {profile.display_name || 'Nome não definido'}</Text>
+            </View>
 
-      {profile && (
-        <>
-          <Text style={styles.profileText}>Nome: {profile.display_name || 'Nome'}</Text>
-          <Text style={styles.profileText}>Bio: {profile.bio || 'No bio'}</Text>
-          <Text style={styles.profileText}>Telefone: {profile.phone_number || '(xx) xxxxx-xxxx'}</Text>
-          <Text style={styles.profileText}>Endereço: {profile.address || 'Endereço'}</Text>
-        </>
-      )}
+            <View style={styles.card}>
+              <Text style={styles.profileText}>Bio: {profile.bio || 'Sem bio'}</Text>
+            </View>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push('/pages/EditProfile')}
-      >
-        <Text style={styles.buttonText}>Editar Perfil</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => signOut()}
-      >
-        <Text style={styles.buttonText}>Sair</Text>
-      </TouchableOpacity>
+            <View style={styles.card}>
+              <Text style={styles.profileText}>Telefone: {profile.phone_number || '(xx) xxxxx-xxxx'}</Text>
+            </View>
+
+            <View style={styles.card}>
+              <Text style={styles.profileText}>Endereço: {profile.address || 'Endereço não definido'}</Text>
+            </View>
+          </>
+        )}
+      </View>
+
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push('/pages/EditProfile')}
+        >
+          <Text style={styles.buttonText}>Editar Perfil</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.signOutButton}
+          onPress={() => signOut()}
+        >
+          <Text style={styles.buttonText}>Sair</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }
@@ -88,22 +103,45 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 16,
-    justifyContent: 'center',
+    backgroundColor: '#f9f9f9',
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    color: '#8c52ff',
+    backgroundColor: '#ffde59',
+    padding: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    elevation: 5,
     textAlign: 'center',
+    marginBottom: 20,
+  },
+  profileContainer: {
+    marginBottom: 40,
+  },
+  card: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 10
   },
   profileText: {
     fontSize: 16,
     marginBottom: 10,
+    color: '#333',
+  },
+  loadingText: {
+    fontSize: 18,
     textAlign: 'center',
+    color: '#8c52ff',
   },
   button: {
-    backgroundColor: '#1E0033',
-    padding: 15,
+    backgroundColor: '#8c52ff',
+    padding: 12,
     marginVertical: 8,
     borderRadius: 8,
     alignItems: 'center',
@@ -111,5 +149,16 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#ffffff',
     fontWeight: 'bold',
+  },
+  signOutButton: {
+    backgroundColor: '#1E0033',
+    padding: 12,
+    marginVertical: 8,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonsContainer: {
+    marginTop: 'auto',
+    paddingBottom: 20,
   },
 });

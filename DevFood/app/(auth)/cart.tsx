@@ -109,7 +109,7 @@ export default function Order() {
                 </Text>
               ))}
               <Text style={styles.createdAt}>
-                Criado em: {new Date(order.created_at).toLocaleString()}
+                Feito em: {new Date(order.created_at).toLocaleString()}
               </Text>
             </View>
           ))
