@@ -7,6 +7,7 @@
 - [expo-location](https://docs.expo.dev/versions/latest/sdk/location/)
 - [vector-icons](https://ionic.io/ionicons)
 - [map-view](https://docs.expo.dev/versions/latest/sdk/map-view/)
+- [maps-direction](https://www.npmjs.com/package/react-native-maps-directions/v/1.4.0)
 
 ## Database
 - [Supabase](https://supabase.com/docs/guides/auth/quickstarts/react-native)
