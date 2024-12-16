@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 import MapView, { Marker } from 'react-native-maps';
 import { requestForegroundPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
-
+import { Stack } from 'expo-router';
 interface OrderItem {
   name: string;
   price: number;
@@ -65,7 +65,7 @@ export default function OrderPage() {
 
   return (
     <>
-    
+    <Stack.Screen options={{title: 'Voltar'}} />
     <View style={styles.container}>
       <Text style={styles.title}>Detalhes do Pedido</Text>
       <View style={styles.contentContainer}>

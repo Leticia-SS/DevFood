@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useCart } from '@/components/CartContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRouter } from 'expo-router';
+import { useRouter, Stack } from 'expo-router';
 import { supabase } from '@/lib/supabase';
 
 export default function CartPage() {
@@ -88,6 +88,8 @@ export default function CartPage() {
   }
 
   return (
+    <>
+    <Stack.Screen options={{title: 'Voltar'}} />
     <View style={styles.container}>
       <Text style={styles.title}>Carrinho</Text>
       {restaurant && (
@@ -134,6 +136,7 @@ export default function CartPage() {
         </TouchableOpacity>
       </View>
     </View>
+    </>
   );
 }
 
