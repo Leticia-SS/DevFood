@@ -43,19 +43,15 @@ export default function Categories() {
     };
 
 
-    const categoryColors = [
-      '#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', 
-      '#ffb3e6', '#ff6666', '#c2ffb3', '#ffccff', '#b3e6ff', '#ff80cc', 
-      '#ffff99', '#ffcc99', '#99ff99', '#c2f0c2'
-  ];
+    const categoryColors = ['#8c52ff', '#f6cb1e', '#ff3131', '#1E0033'];
 
-  const getCardColor = (index: number) => {
-      return categoryColors[index % categoryColors.length];
-  };
+    const getCardColor = (index: number) => {
+        return categoryColors[index % categoryColors.length];
+    };
 
     return(
       <View style={styles.container}>
-      <Text style={styles.text}>Categorias</Text>
+      <Text style={styles.title}>Categorias</Text>
       {loading ? (
           <ActivityIndicator size="large" color="#0000ff" />
       ) : (
@@ -80,12 +76,20 @@ export default function Categories() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20
+    paddingTop: 20,
+    margin: 5
   },
   text: {
     fontSize: 20,
     textAlign: 'center',
     padding: 10,
-    // fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'white'
+  },
+  title: {
+    fontWeight: '400',
+    fontSize: 24,
+    textAlign: 'center',
+    padding: 10,
   }
 })

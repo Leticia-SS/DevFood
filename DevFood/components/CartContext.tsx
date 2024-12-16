@@ -15,6 +15,7 @@ interface CartContextType {
   updateQuantity: (itemId: number, quantity: number) => void;
   clearCart: () => void;
   getTotalPrice: () => number;
+  getRestaurantId: () => number | null;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -32,6 +33,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
+      }
+
+      if (currentCart.length > 0 && currentCart[0].restaurantId !== item.restaurantId) {
+        alert('Somente itens do mesmo restaurante podem ser adicionados no carrinho.');
+        return currentCart;
       }
       
       return [...currentCart, { ...item, quantity: 1 }];
@@ -60,6 +66,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
+  const getRestaurantId = () => {
+    return cart.length > 0 ? cart[0].restaurantId : null;
+  };
+
   return (
     <CartContext.Provider value={{ 
       cart, 
@@ -67,7 +77,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       removeFromCart, 
       updateQuantity, 
       clearCart, 
-      getTotalPrice 
+      getTotalPrice,
+      getRestaurantId 
     }}>
       {children}
     </CartContext.Provider>
@@ -77,7 +88,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 export const useCart = () => {
   const context = useContext(CartContext);
   if (context === undefined) {
-    throw new Error('useCart must be used within a CartProvider');
+    throw new Error('useCard precisa do CartProvider');
   }
   return context;
 };

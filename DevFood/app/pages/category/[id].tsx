@@ -1,4 +1,4 @@
-import { Text, FlatList, View, ActivityIndicator, TouchableOpacity } from "react-native";
+import { Text, FlatList, View, ActivityIndicator, TouchableOpacity, StyleSheet } from "react-native";
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -43,13 +43,13 @@ export default function Category() {
     }, [id]);
 
     const handleRestaurantPress = (restaurantId: number) => {
-        router.push(`/restaurants/${restaurantId}`);
+        router.push(`/pages/restaurants/${restaurantId}`);
     };
 
     return (
         <>
         <Stack.Screen options={{title: 'Voltar'}} />
-        <View style={{ padding: 16 }}>
+        <View style={styles.container}>
             {loading ? (
                 <ActivityIndicator size="large" color="#0000ff" />
             ) : (
@@ -81,3 +81,9 @@ export default function Category() {
         </>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        marginTop: 5
+    }
+})

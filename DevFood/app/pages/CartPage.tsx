@@ -1,9 +1,85 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useCart } from '@/components/CartContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
+import { supabase } from '@/lib/supabase';
 
 export default function CartPage() {
-  const { cart, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
+  const { cart, updateQuantity, removeFromCart, getTotalPrice, clearCart, getRestaurantId } = useCart();
+  const [restaurant, setRestaurant] = useState<any | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
+
+  const restaurantId = getRestaurantId();
+
+  async function getRestaurant(id: number) {
+    const { data: restaurant, error } = await supabase
+      .from('restaurants')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      console.error("Erro ao buscar dados do restaurante:", error);
+    }
+
+    return restaurant;
+  }
+
+  useEffect(() => {
+    const fetchRestaurant = async () => {
+      if (restaurantId) {
+        const savedRestaurant = await AsyncStorage.getItem(`restaurant_${restaurantId}`);
+        
+        if (savedRestaurant) {
+          setRestaurant(JSON.parse(savedRestaurant));
+          setLoading(false);
+        } else {
+          const restaurantData = await getRestaurant(restaurantId);
+          setRestaurant(restaurantData);
+          setLoading(false);
+          
+          AsyncStorage.setItem(`restaurant_${restaurantId}`, JSON.stringify(restaurantData));
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurant();
+  }, [restaurantId]);
+
+  const handleCheckout = async () => {
+    const newOrder = {
+      id: Date.now(),
+      total: getTotalPrice(),
+      items: cart,
+      paymentMethod: "Pagamento em dinheiro",
+      restaurantId: restaurantId,
+      restaurantName: restaurant?.name || '',
+    };
+
+    try {
+      const existingOrdersJson = await AsyncStorage.getItem('pedidos');
+      const existingOrders = existingOrdersJson ? JSON.parse(existingOrdersJson) : [];
+      const updatedOrders = [...existingOrders, newOrder];
+      await AsyncStorage.setItem('pedidos', JSON.stringify(updatedOrders));
+
+      clearCart();
+      router.push('/pages/OrderPage');
+    } catch (error) {
+      console.error('Erro ao salvar pedido:', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Carregando...</Text>
+      </View>
+    );
+  }
 
   if (cart.length === 0) {
     return (
@@ -16,6 +92,9 @@ export default function CartPage() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Carrinho</Text>
+      {restaurant && (
+        <Text style={styles.restaurantName}>{restaurant.name}</Text>
+      )}
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {cart.map((item) => (
           <View key={item.id} style={styles.cartItemContainer}>
@@ -52,7 +131,7 @@ export default function CartPage() {
           <Text style={styles.totalLabel}>Total:</Text>
           <Text style={styles.totalPrice}>R$ {getTotalPrice().toFixed(2)}</Text>
         </View>
-        <TouchableOpacity style={styles.checkoutButton} onPress={clearCart}>
+        <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
           <Text style={styles.checkoutButtonText}>Finalizar Compra</Text>
         </TouchableOpacity>
       </View>
@@ -63,25 +142,37 @@ export default function CartPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     padding: 20,
-    textAlign: 'center'
+    textAlign: 'center',
+  },
+  restaurantName: {
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 10,
+    color: '#4CAF50',
   },
   emptyCartContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   emptyCartText: {
     fontSize: 18,
-    color: '#666'
+    color: '#666',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scrollViewContent: {
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   cartItemContainer: {
     flexDirection: 'row',
@@ -89,19 +180,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee'
+    borderBottomColor: '#eee',
   },
   itemDetails: {
-    flex: 1
+    flex: 1,
   },
   itemName: {
     fontSize: 16,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   itemPrice: {
     fontSize: 14,
     color: '#4CAF50',
-    marginTop: 5
+    marginTop: 5,
   },
   quantityContainer: {
     flexDirection: 'row',
@@ -109,57 +200,58 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderWidth: 1,
     borderColor: '#ddd',
-    borderRadius: 5
+    borderRadius: 5,
   },
   quantityButton: {
     padding: 8,
-    backgroundColor: '#f0f0f0'
+    backgroundColor: '#f0f0f0',
   },
   quantityButtonText: {
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   quantityText: {
     paddingHorizontal: 12,
-    fontSize: 14
+    fontSize: 14,
   },
   removeButton: {
     backgroundColor: '#FF6347',
     padding: 8,
-    borderRadius: 5
+    borderRadius: 5,
   },
   removeButtonText: {
     color: 'white',
-    fontSize: 12
+    fontSize: 12,
   },
   summaryContainer: {
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#eee'
+    borderTopColor: '#eee',
   },
   totalContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15
+    marginBottom: 15,
   },
   totalLabel: {
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   totalPrice: {
     fontSize: 18,
     color: '#4CAF50',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   checkoutButton: {
     backgroundColor: '#4CAF50',
     padding: 15,
     borderRadius: 5,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   checkoutButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });
+
