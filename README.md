@@ -52,6 +52,26 @@
 
 ## Screenshots
 
+![image](https://github.com/user-attachments/assets/e321ea3c-ba8e-4df8-9021-715433894697)
+![image](https://github.com/user-attachments/assets/fc38a9e1-f4d4-4ce7-a648-e14f120a6652)
+![image](https://github.com/user-attachments/assets/ddee41cb-8cce-413d-890b-5136dc438646)
+![image](https://github.com/user-attachments/assets/a431809c-d9a7-4f9c-bf07-2f4af7332620)
+![image](https://github.com/user-attachments/assets/e4b836e1-c09e-490a-96cc-38295f3e10f6)
+![image](https://github.com/user-attachments/assets/9a0c215f-bf68-484d-8dfd-e5d4d4d4de01)
+![image](https://github.com/user-attachments/assets/f09686e6-fdd2-4d3a-ad7f-ea06106bbf5b)
+![image](https://github.com/user-attachments/assets/b0e02efe-f0c5-465d-abe0-96c45e12f66a)
+![image](https://github.com/user-attachments/assets/21fced7e-fd97-4c6e-9a7b-bc00c6fd5422)
+![image](https://github.com/user-attachments/assets/86d72dcb-b0fc-446f-a86d-ad9b576661b6)
+![image](https://github.com/user-attachments/assets/61caba07-0e67-45c3-ac94-69ef0698a6f5)
+![image](https://github.com/user-attachments/assets/865579e4-cb96-40b9-8223-0c03eb4e39f0)
+![image](https://github.com/user-attachments/assets/dbe157de-575b-48d4-84f3-a41ebd538023)
+![image](https://github.com/user-attachments/assets/cef8d3eb-693f-420a-8562-ef5c9a2f75f7)
+![image](https://github.com/user-attachments/assets/5ba0fe2f-99b0-44d6-9090-1ca4c72480ff)
+![image](https://github.com/user-attachments/assets/67aefc69-5f0a-469f-920f-42ed33d3ef74)
+![image](https://github.com/user-attachments/assets/c8a590e5-26c6-4490-9fb2-34d7a11ab4a7)
+![image](https://github.com/user-attachments/assets/e7103c3f-0bfd-4a1a-9624-7c7066543a90)
+![image](https://github.com/user-attachments/assets/f69b9539-5a03-400e-83e7-66e192fb8156)
+
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
