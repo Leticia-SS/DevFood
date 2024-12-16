@@ -102,7 +102,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 16,
+    paddingTop: 20,
     backgroundColor: '#f9f9f9',
     justifyContent: 'space-between',
   },
@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
     color: '#8c52ff',
     backgroundColor: '#ffde59',
     padding: 10,
-    borderRadius: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -127,7 +126,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 10,
     padding: 20,
-    marginBottom: 10
+    marginBottom: 10,
+    marginLeft: 5,
+    marginRight: 5
   },
   profileText: {
     fontSize: 16,
@@ -142,9 +143,11 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#8c52ff',
     padding: 12,
-    marginVertical: 8,
     borderRadius: 8,
     alignItems: 'center',
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 15
   },
   buttonText: {
     color: '#ffffff',
@@ -153,7 +156,8 @@ const styles = StyleSheet.create({
   signOutButton: {
     backgroundColor: '#1E0033',
     padding: 12,
-    marginVertical: 8,
+    marginLeft: 10,
+    marginRight: 10,
     borderRadius: 8,
     alignItems: 'center',
   },

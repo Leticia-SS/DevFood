@@ -63,11 +63,11 @@ export default function EditProfileScreen() {
     <>
     <Stack.Screen options={{title: 'Voltar'}} />
     <View style={styles.container}>
-      <Text style={styles.title}>Edit Profile</Text>
+      <Text style={styles.title}>Editar Perfil</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Display Name"
+        placeholder="Nome de Exibição"
         value={displayName}
         onChangeText={setDisplayName}
       />
@@ -79,19 +79,19 @@ export default function EditProfileScreen() {
       />
       <TextInput
         style={styles.input}
-        placeholder="Phone Number"
+        placeholder="Número de Telefone"
         value={phoneNumber}
         onChangeText={setPhoneNumber}
       />
       <TextInput
         style={styles.input}
-        placeholder="Address"
+        placeholder="Endereço"
         value={address}
         onChangeText={setAddress}
       />
 
       <TouchableOpacity style={styles.button} onPress={handleSave}>
-        <Text style={styles.buttonText}>Save Changes</Text>
+        <Text style={styles.buttonText}>Salvar Alterações</Text>
       </TouchableOpacity>
     </View>
     </>
@@ -102,25 +102,40 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    justifyContent: 'center',
+    backgroundColor: '#f9f9f9',
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    color: '#8c52ff',
+    backgroundColor: '#ffde59',
+    padding: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    elevation: 5,
     textAlign: 'center',
+    marginBottom: 20,
   },
   input: {
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: '#ccc',
-    padding: 10,
-    marginVertical: 8,
+    padding: 12,
+    marginVertical: 10,
     borderRadius: 8,
+    fontSize: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    elevation: 3,
   },
   button: {
-    backgroundColor: '#1E0033',
+    backgroundColor: '#8c52ff',
     padding: 15,
-    marginVertical: 8,
+    marginVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
   },
